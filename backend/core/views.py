@@ -1,13 +1,30 @@
 from .models import Task
 from .serializers import TaskSerializer
+from core.permissions import IsOwner
 from rest_framework import generics
+from django.contrib.auth.models import User
+from rest_framework import permissions
+
+
 
 class TaskList(generics.ListCreateAPIView):
-    """"
+    """
      List all tasks, or create a new task.
     """
+    # Enable in production
+    # Show only owners 'tasks' 
+    # def get_queryset(self, *args, **kwargs):
+    #     return Task.objects.all().filter(owner=self.request.user)
+    
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    # The create() method of our serializer will now be passed an additional 'owner' field,
+    # along with the validated data from the request.
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
 
 class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
     """
@@ -15,8 +32,7 @@ class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-
-
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
 
 
 
