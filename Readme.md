@@ -1,6 +1,6 @@
-##Hello!
+## Hello!
 
-#####This is a fullstack ToDo application using Django REST framework and React.
+##### This is a fullstack ToDo application using Django REST framework and React.
 Goal of this project is to learn RESTful API architechture.
 Resources and tutorials that was used in this project:
 
