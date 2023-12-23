@@ -7,6 +7,8 @@ class Task(models.Model):
     owner =         models.ForeignKey('auth.User', related_name='tasks', on_delete=models.CASCADE)
     completed =     models.BooleanField(default=False)
 
+    def __str__(self) -> str:
+        return self.title
     class Meta:
         ordering = ['created']
     
