@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import {register} from '../api/services';
 
 const Register = () => {
   const [formData, setFormData] = useState({
     email: '',
+    username: '',
     password1: '',
     password2: '',
   });
@@ -15,35 +17,25 @@ const Register = () => {
   };
 
   const handleSubmit = (e) => {
+    const registerEndpoint = 'http://localhost:8000/auth/'
     e.preventDefault();
-    console.log(formData);
-    // Placeholder for registration logic
-    const api_endpoint = "http://localhost:8000/auth/"
-    const username = formData.email.split('@')[0];
-    // console.log('Registration data:', formData);
-    axios.post(api_endpoint, {
-        email: formData.email,
-        username: username,
-        password1: formData.password1,
-        password2: formData.password2
-      }
-    )
-    .then(function (response) {
-      setFormData( {
-        email: '',
-        password1: '',
-        password2: '',
-      });
-      console.log(response);
-      setError('You created an account!')
-      // window.location.href='/login';
+    const data = {
+      email: formData.email,
+      username : formData.email.split('@')[0],
+      password1: formData.password1,
+      password2: formData.password2
+    }
+    axios.post(registerEndpoint, data)
+    .then((response)=>{
+      console.log("Account created!");
+      setFormData({});//clear formdata 
+      window.location.href='/login'
       return;
+    }).catch((error)=>{
+      console.log(error);
+      setError("Something went wrong. Try again later.")
     })
-    .catch(function (error) {
-      // TO DO: render multiple errors
-      console.log(error.response.data);
-      setError("There is an error, try again later!");
-    });
+
   };
 
   return (

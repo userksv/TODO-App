@@ -1,0 +1,10 @@
+Docker Compose - добавить MySQL, Redis, RabbitMQ
+Backend - работа с пользователями - Done
+Backend - работа с сессиями (авторизация, логаут) - Done with token authorization TODO change to sessions
+Frontend - структура страницы, интерфейс и Javascript для регистрации и авторизации Done
+Backend - работа с задачами - Done
+Frontend - листинг, добавление, редактирование, удаление задач 
+Email sender - реализация получения сообщений от RabbitMQ и отправки емейлов
+Backend - отправка приветственного письма при регистрации
+Scheduler - отправка пользовательских отчетов по сделанным и оставшимся задачам
+CI/CD, деплой
