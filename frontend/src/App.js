@@ -9,6 +9,7 @@ import Logout from "./components/Logout";
 import Register from "./components/Register";
 import Navbar from "./components/Navbar";
 
+
 const App = () => {
   const [isAuth, setAuth] = useState(false);
   useState(()=>{
@@ -20,6 +21,7 @@ const App = () => {
   }, [isAuth]);
 
   return (
+    <>
     <Router>
       <div className="container mt-3">
         <Navbar isAuth={isAuth}/>
@@ -31,6 +33,7 @@ const App = () => {
         </Routes>
       </div>
     </Router>
+    </>
   );
 };
 export default App;

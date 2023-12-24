@@ -1,30 +1,49 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    username: '',
     email: '',
-    password: '',
-    confirmPassword: '',
+    password1: '',
+    password2: '',
   });
 
-  const [error, setError] = useState(null);
-
+  const [error, setError] = useState();
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({...formData, [name]: value, });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(formData);
     // Placeholder for registration logic
-    console.log('Registration data:', formData);
-
-    // Simulating an error for demonstration purposes
-    setError('Registration failed. Please try again.');
+    const api_endpoint = "http://localhost:8000/auth/"
+    const username = formData.email.split('@')[0];
+    // console.log('Registration data:', formData);
+    axios.post(api_endpoint, {
+        email: formData.email,
+        username: username,
+        password1: formData.password1,
+        password2: formData.password2
+      }
+    )
+    .then(function (response) {
+      setFormData( {
+        email: '',
+        password1: '',
+        password2: '',
+      });
+      console.log(response);
+      setError('You created an account!')
+      // window.location.href='/login';
+      return;
+    })
+    .catch(function (error) {
+      // TO DO: render multiple errors
+      console.log(error.response.data);
+      setError("There is an error, try again later!");
+    });
   };
 
   return (
@@ -36,22 +55,8 @@ const Register = () => {
               <h3 className="card-title text-center">Register</h3>
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                  {error && <p style={{ color: 'red' }}>{error}</p>}
-                  <label htmlFor="username" className="form-label">
-                    Username
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="username"
-                    name="username"
-                    value={formData.username}
-                    onChange={handleChange}
-                    required
-                    autoFocus
-                  />
-                </div>
-                <div className="mb-3">
+                {error && <p style={{ color: 'red' }}>{error}</p>}
+
                   <label htmlFor="email" className="form-label">
                     Email
                   </label>
@@ -72,9 +77,9 @@ const Register = () => {
                   <input
                     type="password"
                     className="form-control"
-                    id="password"
-                    name="password"
-                    value={formData.password}
+                    id="password1"
+                    name="password1"
+                    value={formData.password1}
                     onChange={handleChange}
                     required
                   />
@@ -86,9 +91,9 @@ const Register = () => {
                   <input
                     type="password"
                     className="form-control"
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    value={formData.confirmPassword}
+                    id="password2"
+                    name="password2"
+                    value={formData.password2}
                     onChange={handleChange}
                     required
                   />
@@ -108,3 +113,4 @@ const Register = () => {
 };
 
 export default Register;
+
