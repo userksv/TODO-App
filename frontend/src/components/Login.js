@@ -1,36 +1,32 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import axios from "axios";
+import { login } from "../auth/authentication";
 
-const LoginForm = () => { // accepting function
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+const Login = () => {
+  const [error, setError] = useState();
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
 
-
-  const handleLogin = (e) => {
-    const loginEndpoint = "http://localhost:8000/auth/login/";
-    e.preventDefault();
-    // Add your login logic here (e.g., API call, authentication)
-    axios
-      .post(loginEndpoint, {
-        username: username,
-        password: password,
-      })
-      .then(function (response) { // is success
-        localStorage.clear();
-        localStorage.setItem("access_key", response.data.key)
-        window.location.href = '/';        
-      })
-      .catch(function (error) {
-        console.log(error);
-        // Set the error message to be displayed to the user
-        setError('Invalid username or password. Please try again.');
-      });
-    // For demonstration purposes, just log the credentials for now
-    console.log("Username:", username);
-    console.log("Password:", password);
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData({ ...formData, [id]: value });
   };
+
+  async function handleLogin(e) {
+    e.preventDefault();
+    try {
+      const res = await login(formData);
+      // console.log(res);
+      setFormData([]);
+      window.location.href = "/";
+      return;
+    } catch (error) {
+      // console.log(error);
+      setError("Check your login and password!");
+    }
+  }
 
   return (
     <div className="container mt-5">
@@ -41,7 +37,7 @@ const LoginForm = () => { // accepting function
               <h3 className="card-title text-center">Login</h3>
               <form onSubmit={handleLogin}>
                 <div className="mb-3">
-                {error && <p style={{ color: 'red' }}>{error}</p>}
+                  {error && <p style={{ color: "red" }}>{error}</p>}
                   <label htmlFor="username" className="form-label">
                     Username
                   </label>
@@ -49,8 +45,8 @@ const LoginForm = () => { // accepting function
                     type="text"
                     className="form-control"
                     id="username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    value={formData.username}
+                    onChange={handleChange}
                     required
                     autoFocus
                   />
@@ -63,8 +59,8 @@ const LoginForm = () => { // accepting function
                     type="password"
                     className="form-control"
                     id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    value={formData.password}
+                    onChange={handleChange}
                     required
                   />
                 </div>
@@ -82,4 +78,4 @@ const LoginForm = () => { // accepting function
   );
 };
 
-export default LoginForm;
+export default Login;

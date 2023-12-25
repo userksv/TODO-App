@@ -33,7 +33,7 @@ class TaskList(generics.ListCreateAPIView):
         print(self.request.user)
         serializer.save(owner=self.request.user)
 
-
+    
 class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     Retrieve, update or delete tasks.
@@ -41,3 +41,7 @@ class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
+    
+    def put(self, request, *args, **kwargs):
+        kwargs['partial'] = True 
+        return self.update(request, *args, **kwargs)
