@@ -5,18 +5,15 @@ import {
   completeTask,
   deleteTask,
 } from "../api/services";
-// add condition if user is authenticated only then render page
+import EditTask from "./EditTask";
+
 export default function Todos(props) {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
   const [isAuth, setAuth] = useState(props.isAuth);
-  // for testing
-  // const TASKS = [
-  //   { id: 1, title: "task 1", completed: false, description: "Task 1 body" },
-  //   { id: 2, title: "task 2", completed: true, description: "Task 2 body" },
-  //   { id: 3, title: "task 3", completed: true, description: "Task 3 body" },
-  // ];
-  //
+  const [isEditing, setIsEditing] = useState(false);
+  const [task, setTask] = useState(null);
+
   async function handleAddTask(e) {
     e.preventDefault();
     if (newTask === "") {
@@ -34,7 +31,22 @@ export default function Todos(props) {
     }
     setNewTask("");
   }
-  function handleEditTask() {}
+
+  async function handleEditTask(task) {
+    setIsEditing(true);
+    setTask(task);
+    // console.log("Task from handle task", task);
+
+    // <EditTask task={task} />;
+  }
+
+  const handleCancel = () => {
+    setIsEditing(false);
+  };
+  const handleSave = () => {
+    setIsEditing(false);
+    // update all tasks
+  };
   async function handleDeleteTask(taskId) {
     if (isAuth) {
       try {
@@ -46,6 +58,7 @@ export default function Todos(props) {
       }
     }
   }
+
   async function handleCheckbox(taskId, checked) {
     if (isAuth) {
       try {
@@ -128,55 +141,62 @@ export default function Todos(props) {
                         Completed
                       </button>
                     </div>
-                    <h2 id="list-heading" className="mt-3">
-                      {tasks.length} tasks remaining
-                    </h2>
-                    <ul
-                      role="list"
-                      className="list-group mt-3"
-                      aria-labelledby="list-heading"
-                    >
-                      {tasks.map((task) => (
-                        <li className="list-group-item d-flex justify-content-between align-items-center">
-                          <div className="form-check">
-                            <input
-                              id={task.id}
-                              type="checkbox"
-                              checked={task.completed}
-                              className="form-check-input"
-                              onChange={(e) =>
-                                handleCheckbox(task.id, e.target.checked)
-                              }
-                            />
+                    {isEditing && (
+                      <EditTask task={task} onCancel={handleCancel} />
+                    )}
+                    {!isEditing && (
+                      <>
+                        <h2 id="list-heading" className="mt-3">
+                          {tasks.length} tasks remaining
+                        </h2>
+                        <ul
+                          role="list"
+                          className="list-group mt-3"
+                          aria-labelledby="list-heading"
+                        >
+                          {tasks.map((task) => (
+                            <li className="list-group-item d-flex justify-content-between align-items-center">
+                              <div className="form-check">
+                                <input
+                                  id={task.id}
+                                  type="checkbox"
+                                  checked={task.completed}
+                                  className="form-check-input"
+                                  onChange={(e) =>
+                                    handleCheckbox(task.id, e.target.checked)
+                                  }
+                                />
 
-                            {/* Add horizontal line here */}
+                                {/* Add horizontal line here */}
 
-                            <label
-                              className="form-check-label todo-label"
-                              htmlFor="todo-0"
-                            >
-                              {task.description.slice(0, 30)}
-                            </label>
-                          </div>
-                          <div className="btn-group btn-group-sm">
-                            <button
-                              type="button"
-                              className="btn btn-warning rounded me-1"
-                            >
-                              Edit
-                            </button>
-                            <button
-                              type="button"
-                              className="btn btn-danger rounded me-1"
-                              onClick={(e) => handleDeleteTask(task.id)}
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        </li>
-                      ))}
-                      {/* Additional Tasks Go Here */}
-                    </ul>
+                                <label
+                                  className="form-check-label todo-label"
+                                  htmlFor="todo-0"
+                                >
+                                  {task.description.slice(0, 30)}
+                                </label>
+                              </div>
+                              <div className="btn-group btn-group-sm">
+                                <button
+                                  type="button"
+                                  className="btn btn-warning rounded me-1"
+                                  onClick={(e) => handleEditTask(task)}
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  type="button"
+                                  className="btn btn-danger rounded me-1"
+                                  onClick={(e) => handleDeleteTask(task.id)}
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      </>
+                    )}
                   </section>
                 )
                 /* *** */

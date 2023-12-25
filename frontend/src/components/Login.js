@@ -18,12 +18,10 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await login(formData);
-      // console.log(res);
       setFormData([]);
       window.location.href = "/";
       return;
     } catch (error) {
-      // console.log(error);
       setError("Check your login and password!");
     }
   }

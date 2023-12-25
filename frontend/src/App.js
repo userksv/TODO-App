@@ -3,11 +3,12 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import Todos from "./components/Todos";
+import Navbar from "./components/Navbar";
+import Register from "./components/Register";
 import Login from "./components/Login";
 import Logout from "./components/Logout";
-import Register from "./components/Register";
-import Navbar from "./components/Navbar";
+import Todos from "./components/Todos";
+import EditTask from "./components/EditTask";
 
 const App = () => {
   const [isAuth, setAuth] = useState(false);
