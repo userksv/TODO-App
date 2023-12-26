@@ -10,3 +10,4 @@ Resources and tutorials that was used in this project:
 
 Technical requirements for this project:
 >https://zhukovsd.github.io/python-backend-learning-course/Projects/TaskTracker/
+

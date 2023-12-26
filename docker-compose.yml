@@ -1,6 +1,9 @@
 version: "3.9"
 
 services:
+  redis:
+    image: "redis:alpine"
+    container_name: redis
   db:
     image: postgres:16-alpine
     ports:
@@ -37,4 +40,5 @@ services:
     volumes:
       - ./backend:/app/backend
     depends_on:
+      - redis
       - db

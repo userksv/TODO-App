@@ -45,3 +45,61 @@ class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
     def put(self, request, *args, **kwargs):
         kwargs['partial'] = True 
         return self.update(request, *args, **kwargs)
+
+
+################################################################
+"""
+ Get back to this later.
+    1. How to store token in Redis? copy from django DB? or create new?
+        dj_rest_auth by default stores token in `authtoken_token` table
+
+"""
+# from rest_framework.authentication import TokenAuthentication
+# from rest_framework.permissions import IsAuthenticated
+# from rest_framework.views import APIView
+# from django.core.cache import cache
+
+# class ExampleView(APIView, TokenAuthentication):
+#     # authentication_classes = TokenAuthentication
+#     # permission_classes = [IsAuthenticated]
+
+#     def get_model(self):
+#             if self.model is not None:
+#                 return self.model
+#             from rest_framework.authtoken.models import Token
+#             return Token
+    
+#     def get(self, request, fromat=None):
+#         model = self.get_model()
+#         print(model)
+#         return Response("model")
+        
+
+
+
+#         #  # Set a value into the cache
+#         # cache.set('my_key', 'my_value', 300)  # Cache for 300 seconds
+
+#         # # Get a value from the cache
+#         # my_value = cache.get('my_key')
+
+#         # # content = {
+#         # #     'user': str(request.user), # django.contrib.auth.User instance
+#         # #     'auth': str(request.auth), # None
+#         # # }
+#         # return Response(my_value)
+    
+
+    
+# class RedisTokenAuthentication(TokenAuthentication):
+#     def get_model(self):
+#         return self.model
+
+#     def authenticate_credentials(self, key):
+#         # Check if the token is present in Redis
+#         user = cache.get(key)
+#         if user is None:
+#             # If not in Redis, fall back to the default TokenAuthentication behavior
+#             return super().authenticate_credentials(key)
+
+#         return user, None
