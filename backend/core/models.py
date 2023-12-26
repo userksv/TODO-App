@@ -8,7 +8,7 @@ class Task(models.Model):
     completed =     models.BooleanField(default=False)
 
     def __str__(self) -> str:
-        return self.title
+        return f'{self.owner.username} - {self.title}'
     class Meta:
         ordering = ['created']
     

@@ -23,7 +23,7 @@ class TaskList(generics.ListCreateAPIView):
     def get_queryset(self, *args, **kwargs):
         return Task.objects.all().filter(owner=self.request.user)
     
-    # queryset = Task.objects.all()
+    # queryset = Task.objects.all() # this allows not auth users read all tasks
     serializer_class = TaskSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
