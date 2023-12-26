@@ -14,8 +14,8 @@ async function editTask(data) {
     .catch((error) => console.log(error));
 }
 
-async function deleteTask(taskId) {
-  const apiEndpoint = `http://localhost:8000/tasks/${taskId}`;
+async function deleteTask(task) {
+  const apiEndpoint = task.url;
   const access_key = localStorage.getItem("access_key");
   return axios
     .delete(apiEndpoint, {
@@ -27,8 +27,8 @@ async function deleteTask(taskId) {
     .catch((error) => console.log(error));
 }
 
-async function completeTask(taksId, completed) {
-  const apiEndpoint = `http://localhost:8000/tasks/${taksId}`;
+async function completeTask(task, completed) {
+  const apiEndpoint = task.url;
   const access_key = localStorage.getItem("access_key");
   const data = { completed: completed };
   return axios

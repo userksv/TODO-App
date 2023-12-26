@@ -3,6 +3,7 @@ import axios from "axios";
 import { register, handleAuthErrors } from "../auth/authentication";
 
 const Register = () => {
+  // IN DEV MODE REACT RENDERS TWICE THIS TRIGGERS ERROR WHEN NEW USER IS REGISTERED
   const [formData, setFormData] = useState({
     email: "",
     username: "",

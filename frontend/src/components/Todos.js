@@ -13,6 +13,43 @@ export default function Todos(props) {
   const [isAuth, setAuth] = useState(props.isAuth);
   const [isEditing, setIsEditing] = useState(false);
   const [task, setTask] = useState(null);
+  const [filteredTasks, setFilteredTasks] = useState([]);
+  const [activeFilter, setActiveFilter] = useState("all");
+
+  async function handleCheckbox(task, checked) {
+    if (isAuth) {
+      try {
+        const res = await completeTask(task, checked); // change `completed` on backend
+        const updatedTasks = await fetchTasks(); // fetch updated tasks
+        setTasks([...updatedTasks]); // why -> setTasks(updatedTasks) not updating checkbox state
+        setFilteredTasks([...updatedTasks]); // why -> setFilteredTasks(updatedTasks) not updating checkbox state
+      } catch (error) {
+        console.error("Error completing task:", error);
+      }
+    }
+  }
+
+  //////////////////////////////////////////
+  async function handleFilterTasks(e) {
+    switch (e) {
+      case "all":
+        setFilteredTasks(tasks);
+        setActiveFilter("all");
+        break;
+      case "active":
+        const activeTasks = tasks.filter((task) => !task.completed);
+        setFilteredTasks(activeTasks);
+        setActiveFilter("active");
+        break;
+      case "completed":
+        const completedTasks = tasks.filter((task) => task.completed);
+        setFilteredTasks(completedTasks);
+        setActiveFilter("completed");
+        break;
+      default:
+        return;
+    }
+  }
 
   async function handleAddTask(e) {
     e.preventDefault();
@@ -25,6 +62,7 @@ export default function Todos(props) {
         const res = await addNewTask(title, newTask);
         const taskData = await fetchTasks(); // fetch updated tasks
         setTasks(taskData);
+        setFilteredTasks(taskData);
       } catch (error) {
         console.error("Error completing task:", error);
       }
@@ -47,24 +85,13 @@ export default function Todos(props) {
     setIsEditing(false);
     // update all tasks
   };
-  async function handleDeleteTask(taskId) {
+  async function handleDeleteTask(task) {
     if (isAuth) {
       try {
-        const res = await deleteTask(taskId);
+        const res = await deleteTask(task);
         const taskData = await fetchTasks(); // fetch updated tasks
         setTasks(taskData);
-      } catch (error) {
-        console.error("Error completing task:", error);
-      }
-    }
-  }
-
-  async function handleCheckbox(taskId, checked) {
-    if (isAuth) {
-      try {
-        const res = await completeTask(taskId, checked); // change `completed` on backend
-        const taskData = await fetchTasks(); // fetch updated tasks
-        setTasks(taskData);
+        setFilteredTasks(taskData);
       } catch (error) {
         console.error("Error completing task:", error);
       }
@@ -76,7 +103,10 @@ export default function Todos(props) {
       if (isAuth) {
         try {
           const tasksData = await fetchTasks();
-          setTasks(tasksData);
+          setTasks(tasksData); // learn more about asynchronous
+          setFilteredTasks(tasksData); // learn more about asynchronous
+          // console.log(tasksData) it will be empty, beacause fetchTasks returns `promise`
+          // `promise` occur after component finishes executing
         } catch (error) {
           console.error("Error fetching tasks:", error);
         }
@@ -124,19 +154,31 @@ export default function Todos(props) {
                     >
                       <button
                         type="button"
-                        className="btn btn-outline-dark btn-blcok rounded me-1 active"
+                        className={`btn btn-outline-dark btn-blcok rounded me-1 ${
+                          activeFilter === "all" ? "active" : ""
+                        }`}
+                        value={"all"}
+                        onClick={(e) => handleFilterTasks(e.target.value)}
                       >
                         All
                       </button>
                       <button
                         type="button"
-                        className="btn btn-outline-dark btn-blcok rounded me-1"
+                        className={`btn btn-outline-dark btn-blcok rounded me-1 ${
+                          activeFilter === "active" ? "active" : ""
+                        }`}
+                        value={"active"}
+                        onClick={(e) => handleFilterTasks(e.target.value)}
                       >
                         Active
                       </button>
                       <button
                         type="button"
-                        className="btn btn-outline-dark btn-blcok rounded me-1"
+                        className={`btn btn-outline-dark btn-blcok rounded me-1 ${
+                          activeFilter === "complited" ? "active" : ""
+                        }`}
+                        value={"completed"}
+                        onClick={(e) => handleFilterTasks(e.target.value)}
                       >
                         Completed
                       </button>
@@ -154,8 +196,11 @@ export default function Todos(props) {
                           className="list-group mt-3"
                           aria-labelledby="list-heading"
                         >
-                          {tasks.map((task) => (
-                            <li className="list-group-item d-flex justify-content-between align-items-center">
+                          {filteredTasks.map((task) => (
+                            <li
+                              key={task.id}
+                              className="list-group-item d-flex justify-content-between align-items-center"
+                            >
                               <div className="form-check">
                                 <input
                                   id={task.id}
@@ -163,7 +208,7 @@ export default function Todos(props) {
                                   checked={task.completed}
                                   className="form-check-input"
                                   onChange={(e) =>
-                                    handleCheckbox(task.id, e.target.checked)
+                                    handleCheckbox(task, e.target.checked)
                                   }
                                 />
 
@@ -187,7 +232,7 @@ export default function Todos(props) {
                                 <button
                                   type="button"
                                   className="btn btn-danger rounded me-1"
-                                  onClick={(e) => handleDeleteTask(task.id)}
+                                  onClick={(e) => handleDeleteTask(task)}
                                 >
                                   Delete
                                 </button>

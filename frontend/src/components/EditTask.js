@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { editTask } from "../api/services";
+import { useNavigate } from "react-router-dom";
 
 const EditTask = ({ task, onCancel }) => {
+  const navigate = useNavigate();
   const [editedTask, setEditedTask] = useState(task);
 
   const handleOnChange = (e) => {
@@ -12,10 +14,11 @@ const EditTask = ({ task, onCancel }) => {
 
   const handleSave = async (e) => {
     e.preventDefault();
-    // send put request
     try {
+      // send put request
       const res = await editTask(editedTask);
       window.location.href = "/";
+      // navigate("/"); // submit on `Enter and on Click does not work` ask somebody
     } catch (error) {
       console.log(error);
     }
@@ -35,7 +38,6 @@ const EditTask = ({ task, onCancel }) => {
             onChange={handleOnChange}
           />
         </div>
-        {/* Add more input fields as needed for other task properties */}
         <div className="button-group">
           <button type="submit" className="btn btn-success">
             Save
