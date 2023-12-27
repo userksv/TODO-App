@@ -3,10 +3,12 @@
 from django.urls import path
 from dj_rest_auth.urls import urlpatterns as auth_urls
 from dj_rest_auth.registration.urls import urlpatterns as registration_urls
-
-urlpatterns = [] 
+from . import views
+urlpatterns = [
+    path('', views.CustomRegisterView.as_view(), name='rest_register')
+]
 urlpatterns += auth_urls
-urlpatterns += registration_urls
+# urlpatterns += registration_urls
 
 
 
