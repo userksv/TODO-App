@@ -47,25 +47,6 @@ class TaskDetail(generics.RetrieveAPIView):
 class TaskDelete(generics.DestroyAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    permission_classes = [permissions.IsAuthenticated, IsOwner]
-
-
-class TaskUpdate(generics.UpdateAPIView):
-    """ Put method """
-    queryset = Task.objects.all()
-    serializer_class = TaskSerializer
-    permission_classes = [permissions.IsAuthenticated, IsOwner]
-    
-
-class TaskPatch(generics.UpdateAPIView):
-    """ Patch method """
-    queryset = Task.objects.all()
-    serializer_class = TaskSerializer
-    permission_classes = [permissions.IsAuthenticated, IsOwner]
-
-   
-# class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
-#     """ 
 #     This is a class which handles RETRIVE-GET PUT PATCH DELETE methods.
 #     This was the first implamentation of this app.
 #     Which approach is better or scalable?
