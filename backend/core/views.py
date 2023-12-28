@@ -14,16 +14,20 @@ def api_root(request, format=None):
         'tasks': reverse('task-list', request=request, format=format),
     })
 
-class TaskList(generics.ListCreateAPIView):
-    """
-     List all tasks, or create a new task.
-    """
+
+class TaskList(generics.ListAPIView):
+    """ List all tasks, or create a new task. """
     # Enable in production
-    # Show only owners 'tasks' 
+    # # Show only owners 'tasks' 
     def get_queryset(self, *args, **kwargs):
         return Task.objects.all().filter(owner=self.request.user)
     
-    # queryset = Task.objects.all() # this allows not auth users read all tasks
+    # queryset = Task.objects.all() # this allows not auth users read all tasks 
+    serializer_class = TaskSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+class TaskCreate(generics.CreateAPIView):
     serializer_class = TaskSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
@@ -34,20 +38,57 @@ class TaskList(generics.ListCreateAPIView):
         serializer.save(owner=self.request.user)
 
     
-class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
-    """
-    Retrieve, update or delete tasks.
-    """
+class TaskDetail(generics.RetrieveAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
     
-    def put(self, request, *args, **kwargs):
-        kwargs['partial'] = True 
-        return self.update(request, *args, **kwargs)
+ 
+class TaskDelete(generics.DestroyAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
+
+
+class TaskUpdate(generics.UpdateAPIView):
+    """ Put method """
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
+    
+
+class TaskPatch(generics.UpdateAPIView):
+    """ Patch method """
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
+
+   
+# class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
+#     """ 
+#     This is a class which handles RETRIVE-GET PUT PATCH DELETE methods.
+#     This was the first implamentation of this app.
+#     Which approach is better or scalable?
+#     Here I can handle all http methods in one place, and url will be path('task/<int:pk>', views.TaskDetailView.as_view())
+#     for all views.
+#     """
+#     queryset = Task.objects.all()
+#     serializer_class = TaskSerializer
+#     permission_classes = [permissions.IsAuthenticated, IsOwner]
+
+#     def put(self, request, *args, **kwargs):
+#         return super().put(request, *args, **kwargs)
+#     def update(self, request, *args, **kwargs):
+#         return super().update(request, *args, **kwargs)
+#     def delete(self, request, *args, **kwargs):
+#         return super().delete(request, *args, **kwargs)
+#     def patch(self, request, *args, **kwargs):
+#         kwargs['partial'] = True 
+#         return self.update(request, *args, **kwargs)
 
 
 ################################################################
+
 """
  Get back to this later.
     1. How to store token in Redis? copy from django DB? or create new?

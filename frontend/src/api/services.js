@@ -2,7 +2,7 @@ import axios from "axios";
 
 async function editTask(data) {
   /* data contains url of the `task`, this implemantation on backend */
-  const apiEndpoint = data.url;
+  const apiEndpoint = `${data.url}/update`;
   const access_key = localStorage.getItem("access_key");
   return axios
     .put(apiEndpoint, data, {
@@ -15,7 +15,7 @@ async function editTask(data) {
 }
 
 async function deleteTask(task) {
-  const apiEndpoint = task.url;
+  const apiEndpoint = `${task.url}/delete`;
   const access_key = localStorage.getItem("access_key");
   return axios
     .delete(apiEndpoint, {
@@ -28,11 +28,11 @@ async function deleteTask(task) {
 }
 
 async function completeTask(task, completed) {
-  const apiEndpoint = task.url;
+  const apiEndpoint = `${task.url}/patch`;
   const access_key = localStorage.getItem("access_key");
   const data = { completed: completed };
   return axios
-    .put(apiEndpoint, data, {
+    .patch(apiEndpoint, data, {
       headers: {
         Authorization: `Token ${access_key}`,
       },
@@ -56,7 +56,7 @@ async function fetchTasks() {
 
 async function addNewTask(title, text) {
   const access_key = localStorage.getItem("access_key");
-  const apiEndpoint = "http://localhost:8000/tasks/";
+  const apiEndpoint = "http://localhost:8000/task/create";
   const data = {
     title: title,
     description: text,

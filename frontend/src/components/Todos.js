@@ -4,6 +4,7 @@ import {
   fetchTasks,
   completeTask,
   deleteTask,
+  editTask,
 } from "../api/services";
 import EditTask from "./EditTask";
 
