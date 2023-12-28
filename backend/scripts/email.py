@@ -8,12 +8,13 @@ def send_email_remainder():
     emails = get_emails_for_completed_false()
     if emails:
         for addr, tasks in emails.items():
-            send_mail(
-                'Remainder from Your Tasks!',
-                f'Hey! You have {tasks} uncompleted tasks!\n Just reminder',
-                'From TODO app developer',
-                [addr]
-            )
+            print(f'Hey!\nYou have:\n \t{tasks[0]} active tasks\n\t{tasks[1]} uncompleted tasks!\nJust reminder')
+            # send_mail(
+            #     'Remainder from Your Tasks!',
+            #     f'Hey!\n You have:\n \t {tasks[0]} active tasks\n\t{tasks[1]} uncompleted tasks!\n Just reminder',
+            #     'From TODO app developer',
+            #     [addr]
+            # )
     print('Sending email........')
 
 
@@ -29,7 +30,11 @@ def get_emails_for_completed_false():
         if not users_and_incomplete_tasks:
             return None
         # return [{'email': i.email, 'count': i.tasks.filter(completed=False).count()} for i in users_and_incomplete_tasks]
-        return {i.email: i.tasks.filter(completed=False).count() for i in users_and_incomplete_tasks}
+        return {i.email: [
+            i.tasks.filter(completed=False).count(),
+            i.tasks.filter(completed=True).count(),
+            ] 
+            for i in users_and_incomplete_tasks}
    except:
         print("Some error")
         return None
