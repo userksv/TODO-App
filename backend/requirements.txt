@@ -18,9 +18,11 @@ django-allauth==0.59.0
 django-celery-beat==2.5.0
 django-celery-results==2.5.1
 django-cors-headers==4.3.1
+django-extensions==3.2.3
 django-redis==5.4.0
 django-timezone-field==6.1.0
 djangorestframework==3.14.0
+gunicorn==21.2.0
 httpie==3.2.2
 idna==3.6
 kombu==5.3.4
@@ -28,6 +30,7 @@ markdown-it-py==3.0.0
 mdurl==0.1.2
 multidict==6.0.4
 oauthlib==3.2.2
+packaging==23.2
 prompt-toolkit==3.0.43
 psycopg2-binary==2.9.9
 pycparser==2.21

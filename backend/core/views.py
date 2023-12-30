@@ -34,8 +34,8 @@ class TaskCreate(generics.CreateAPIView):
     # The create() method of our serializer will now be passed an additional 'owner' field,
     # along with the validated data from the request.
     def perform_create(self, serializer):
-        print(self.request.user)
         serializer.save(owner=self.request.user)
+        return super().perform_create(serializer)
 
     
 class TaskDetail(generics.RetrieveAPIView):

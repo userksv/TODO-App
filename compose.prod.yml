@@ -1,13 +1,12 @@
 version: "3.9"
-
 services:
   # Worker
   # this image does not copy requirements.txt from ./backend/ ???
   # how to reduce image size
   celery_worker:
+    image: userksv/mysite-celery_worker
     build:
       context: .
-      dockerfile: ./backend/Dockerfile
     command: python -m celery -A todo_project worker -l info
     volumes:
       - ./backend:/app/backend
@@ -16,9 +15,9 @@ services:
       - db
   # Beat
   celery_beat:
+    image: userksv/mysite-celery_beat
     build:
       context: .
-      dockerfile: ./backend/Dockerfile
     command: celery -A todo_project beat -l INFO
     volumes:
       - ./backend:/app/backend
@@ -32,7 +31,7 @@ services:
 
   # PostgreSQL
   db:
-    image: postgres:16-alpine
+    image: userksv/mysite-postgres
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
@@ -42,9 +41,9 @@ services:
 
   # React
   frontend:
+    image: userksv/mysite-frontend
     build:
       context: ./frontend
-      dockerfile: Dockerfile
     ports:
       - 3000:3000
     volumes:
@@ -54,10 +53,9 @@ services:
 
   # Django
   backend:
-    container_name: backend
+    image: userksv/mysite-backend
     build:
       context: ./backend
-      dockerfile: Dockerfile
     command: python manage.py runserver 0.0.0.0:8000
     environment:
       - POSTGRES_PASSWORD=postgres

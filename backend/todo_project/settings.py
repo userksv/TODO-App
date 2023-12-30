@@ -157,24 +157,23 @@ CORS_ALLOW_ALL_ORIGINS = True # If this is used then `CORS_ALLOWED_ORIGINS` will
 #     'http://localhost:3000',
 # ]
 
-# SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-# SESSION_CACHE_ALIAS = "default"
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
 
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django_redis.cache.RedisCache",
-#         "LOCATION": 'redis://redis:6379/', # https://stackoverflow.com/questions/51857501/docker-redis-django-connection-refused
-#         "OPTIONS": {
-#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-#         }
-#     }
-# }
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": 'redis://redis:6379/', # https://stackoverflow.com/questions/51857501/docker-redis-django-connection-refused
+        # "LOCATION": 'redis://localhost:6379/', 
+    }
+}
+
 
 # Celery settings
-# CELERY_BROKER_URL = "redis://redis:6379" # for Docker connection
-# CELERY_RESULT_BACKEND = "redis://redis:6379"
-CELERY_BROKER_URL = "redis://localhost:6379"
-CELERY_RESULT_BACKEND = "redis://localhost:6379"
+CELERY_BROKER_URL = "redis://redis:6379" # for Docker connection
+CELERY_RESULT_BACKEND = "redis://redis:6379"
+# CELERY_BROKER_URL = "redis://localhost:6379" # localy
+# CELERY_RESULT_BACKEND = "redis://localhost:6379"
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERY_TIMEZONE = 'Asia/Seoul'
 # CELERY_ACCEPT_CONTENT = ['application/json']

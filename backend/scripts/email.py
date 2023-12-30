@@ -5,9 +5,10 @@ from django.core.mail import send_mail
 def send_email_remainder():
     # TODO:
     # Get all users email addresse with not completed tasks
-    emails = get_emails_for_completed_false()
-    if emails:
-        for addr, tasks in emails.items():
+    users = get_users_tasks()
+    print(users)
+    if users:
+        for email, tasks in users.items():
             print(f'Hey!\nYou have:\n \t{tasks[0]} active tasks\n\t{tasks[1]} uncompleted tasks!\nJust reminder')
             # send_mail(
             #     'Remainder from Your Tasks!',
@@ -18,26 +19,21 @@ def send_email_remainder():
     print('Sending email........')
 
 
-def get_emails_for_completed_false():
+def get_users_tasks():
    """
-   Function return list of dict {email:tasks count}
-   or None if there is empty query
+   Function return dict {email:[active_tasks, completed_tasks]}
+   or None if there is an empty query
    """
-   
    try:
-        # distinct()-eliminates duplicate rows
-        users_and_incomplete_tasks = User.objects.filter(tasks__completed=False).distinct().prefetch_related('tasks')
-        if not users_and_incomplete_tasks:
+        users = User.objects.all().prefetch_related('tasks')
+        if not users:
             return None
-        # return [{'email': i.email, 'count': i.tasks.filter(completed=False).count()} for i in users_and_incomplete_tasks]
         return {i.email: [
             i.tasks.filter(completed=False).count(),
             i.tasks.filter(completed=True).count(),
             ] 
-            for i in users_and_incomplete_tasks}
+            for i in users}
    except:
         print("Some error")
         return None
-
-       
-send_email_remainder()
+   
