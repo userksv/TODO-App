@@ -1,4 +1,4 @@
-from dj_rest_auth.registration.views import RegisterView
+from dj_rest_auth.registration.views import RegisterView, LoginView
 from allauth.account import app_settings
 from .tasks import send_welcome_email_task
 
@@ -22,4 +22,7 @@ class CustomRegisterView(RegisterView):
         
         print("custom register class")
         return super().create(request, *args, **kwargs)
-    
+
+
+class CustomLoginView(LoginView):
+    ...

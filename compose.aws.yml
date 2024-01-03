@@ -17,10 +17,6 @@ services:
       - POSTGRES_DB=postgres
     ports:
       - 8000:8000
-    depends_on:
-      - db
-      - redis
-
   # React
   frontend:
     build:
@@ -42,20 +38,6 @@ services:
     depends_on:
       - backend
       - frontend
-
-  # PostgreSQL
-  db:
-    image: postgres:16-alpine
-    environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=postgres
-    volumes:
-      - ./data/db:/var/lib/postgresql/data/
-
-  # Redis
-  redis:
-    image: "redis:alpine"
 
   # Worker
   # this image does not copy requirements.txt from ./backend/ ???

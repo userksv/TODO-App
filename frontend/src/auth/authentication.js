@@ -2,7 +2,6 @@ import axios from "axios";
 
 async function register(data) {
   const authEndpoint = "http://localhost:8000/auth/";
-  console.log(data);
   return axios
     .post(authEndpoint, data)
     .then((response) => response.data)
@@ -12,7 +11,6 @@ async function register(data) {
 }
 
 async function login(data) {
-  console.log(data);
   const authEndpoint = "http://localhost:8000/auth/login/";
   return axios
     .post(authEndpoint, data)
