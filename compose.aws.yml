@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  # Django
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: 930849404806.dkr.ecr.ap-northeast-2.amazonaws.com/todo:backend
+    volumes:
+      - ./backend:/app/backend
+    env_file:
+      - ./backend/todo_project/.env
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - 8000:8000
