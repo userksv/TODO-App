@@ -19,21 +19,21 @@ services:
       - 8000:8000
     depends_on:
       - redis
-      # - db
+      - db
 
   # Redis
   redis:
     image: "redis:alpine"
 
   # PostgreSQL
-  # db:
-  #   image: postgres:16-alpine
-  #   environment:
-  #     - POSTGRES_PASSWORD=postgres
-  #     - POSTGRES_USER=postgres
-  #     - POSTGRES_DB=postgres
-  #   volumes:
-  #     - ./data/db:/var/lib/postgresql/data/
+  db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data/
 
   # React
   frontend:
@@ -44,3 +44,5 @@ services:
     container_name: frontend
     ports:
       - "80:80"
+    depends_on:
+      - backend
