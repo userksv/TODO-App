@@ -163,9 +163,11 @@ SESSION_CACHE_ALIAS = "default"
 
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        # "LOCATION": 'redis://redis:6379/', # https://stackoverflow.com/questions/51857501/docker-redis-django-connection-refused
-        "LOCATION": 'redis://127.0.0.1:6379/1', 
+        "BACKEND": "django_redis.cache.RedisCachee",
+        "LOCATION": 'redis://127.0.0.1:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
     }
 }
 
