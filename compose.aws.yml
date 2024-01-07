@@ -43,6 +43,8 @@ services:
     command: celery -A todo_project worker -l info
     volumes:
       - ./backend:/app/backend
+    env_file:
+      - ./backend/todo_project/.env
     depends_on:
       - redis
   # Beat
@@ -54,5 +56,7 @@ services:
     command: celery -A todo_project beat -l INFO
     volumes:
       - ./backend:/app/backend
+    env_file:
+      - ./backend/todo_project/.env
     depends_on:
       - redis
