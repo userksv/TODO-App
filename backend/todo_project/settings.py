@@ -164,7 +164,8 @@ SESSION_CACHE_ALIAS = "default"
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCachee",
-        "LOCATION": 'redis://127.0.0.1:6379/1',
+        # "LOCATION": 'redis://127.0.0.1:6379/1',
+        "LOCATION": "redis://redis:6379",
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
@@ -173,10 +174,10 @@ CACHES = {
 
 
 # Celery settings
-# CELERY_BROKER_URL = "redis://redis:6379" # for Docker connection
-# CELERY_RESULT_BACKEND = "redis://redis:6379"
-CELERY_BROKER_URL = "redis://127.0.0.1:6379/1" 
-CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/1"
+CELERY_BROKER_URL = "redis://redis:6379" # for Docker connection
+CELERY_RESULT_BACKEND = "redis://redis:6379"
+# CELERY_BROKER_URL = "redis://127.0.0.1:6379/1" 
+# CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/1"
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERY_TIMEZONE = 'Asia/Seoul'
 # CELERY_ACCEPT_CONTENT = ['application/json']
