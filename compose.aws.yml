@@ -17,3 +17,6 @@ services:
       - POSTGRES_DB=postgres
     ports:
       - 8000:8000
+    # Redis
+  redis:
+    image: 930849404806.dkr.ecr.ap-northeast-2.amazonaws.com/todo:redis
