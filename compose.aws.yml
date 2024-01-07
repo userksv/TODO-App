@@ -17,3 +17,9 @@ services:
       - POSTGRES_DB=postgres
     ports:
       - 8000:8000
+    depends_on:
+      - redis
+
+  # Redis
+  redis:
+    image: "redis:alpine"
