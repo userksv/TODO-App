@@ -9,7 +9,7 @@ services:
     image: 930849404806.dkr.ecr.ap-northeast-2.amazonaws.com/todo:backend
     volumes:
       - ./backend:/app/backend
-      - ./backend:/app/backend/staticfiles
+      - static_volume:/app/backend/django_static
     env_file:
       - ./backend/todo_project/.env
     ports:
@@ -21,14 +21,18 @@ services:
   redis:
     image: "redis:alpine"
 
-  # React
+  # React-nginx
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
     image: 930849404806.dkr.ecr.ap-northeast-2.amazonaws.com/todo:frontend
     container_name: frontend
+    volumes:
+      - static_volume:/app/backend/django_static
     ports:
       - "80:80"
     depends_on:
       - backend
+volumes:
+  static_volume:
