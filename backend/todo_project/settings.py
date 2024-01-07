@@ -165,7 +165,7 @@ CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
         # "LOCATION": 'redis://redis:6379/', # https://stackoverflow.com/questions/51857501/docker-redis-django-connection-refused
-        "LOCATION": 'redis://localhost:6379/1', 
+        "LOCATION": 'redis://127.0.0.1:6379/1', 
     }
 }
 
@@ -173,8 +173,8 @@ CACHES = {
 # Celery settings
 # CELERY_BROKER_URL = "redis://redis:6379" # for Docker connection
 # CELERY_RESULT_BACKEND = "redis://redis:6379"
-CELERY_BROKER_URL = "redis://localhost:6379/1" 
-CELERY_RESULT_BACKEND = "redis://localhost:6379/1"
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/1" 
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/1"
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERY_TIMEZONE = 'Asia/Seoul'
 # CELERY_ACCEPT_CONTENT = ['application/json']
