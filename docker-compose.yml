@@ -6,7 +6,7 @@ services:
   celery_worker:
     build:
       context: .
-      dockerfile: ./backend/Dockerfile
+      dockerfile: ./backend/Dockerfile.dev
     command: python -m celery -A todo_project worker -l info
     volumes:
       - ./backend:/app/backend
@@ -17,7 +17,7 @@ services:
   celery_beat:
     build:
       context: .
-      dockerfile: ./backend/Dockerfile
+      dockerfile: ./backend/Dockerfile.dev
     command: celery -A todo_project beat -l INFO
     volumes:
       - ./backend:/app/backend
@@ -43,12 +43,12 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - 3000:3000
+      dockerfile: Dockerfile.dev
     volumes:
       - ./frontend:/app/frontend
       - /app/node_modules
+    ports:
+      - 80:80
     depends_on:
       - backend
 
@@ -57,12 +57,13 @@ services:
     container_name: backend
     build:
       context: ./backend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./backend:/app/backend
+      - static_volume:/app/backend/staticfiles
     env_file:
-      - ./backend/todo_project/.env
+      - ./backend/todo_project/.envdev
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
@@ -72,3 +73,5 @@ services:
     depends_on:
       - redis
       - db
+volumes:
+  static_volume:

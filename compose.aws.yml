@@ -9,6 +9,7 @@ services:
     image: 930849404806.dkr.ecr.ap-northeast-2.amazonaws.com/todo:backend
     volumes:
       - ./backend:/app/backend
+      - static_volume:/app/backend/staticfiles
     env_file:
       - ./backend/todo_project/.env
     ports:
@@ -26,6 +27,9 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     image: 930849404806.dkr.ecr.ap-northeast-2.amazonaws.com/todo:frontend
+    volumes:
+      - ./frontend:/app/frontend
+      - /app/node_modules
     container_name: frontend
     ports:
       - "80:80"
@@ -60,3 +64,5 @@ services:
       - ./backend/todo_project/.env
     depends_on:
       - redis
+volumes:
+  static_volume:
