@@ -1,29 +1,17 @@
-FROM --platform="linux/amd64" node:alpine as build
+FROM --platform="linux/amd64" node:18.12.1-alpine AS builder
 
-WORKDIR /app/frontend/
+WORKDIR /app
+COPY package.json package-lock.json ./
 
-COPY . /app/frontend
+COPY . .
+RUN npm ci
+RUN npm run build
 
-RUN npm install
+FROM --platform="linux/amd64" nginx:1.23.2-alpine
 
-CMD [ "npm", "run", "build" ]
+COPY ./.nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /app/build /usr/share/nginx/html
 
-FROM --platform="linux/amd64" nginx:alpine
-
-# Copy the Nginx configuration file
-COPY ./default.conf /etc/nginx/conf.d/default.conf
-
-# Copy additional static files or configurations if needed
-COPY ./static /usr/share/nginx/html/static
-
-# Copy the built assets from the previous stage
-COPY --from=build /app/frontend/dist /usr/share/nginx/html
-
-# Add any additional configurations you need
-# For example, if you want to customize Nginx behavior further
-# COPY ./nginx-custom.conf /etc/nginx/nginx.conf
-
-# Expose the port Nginx will be listening on (default is 80)
 EXPOSE 80
 
-# CMD is not needed here as it will use the default CMD from the nginx:alpine image
+CMD ["nginx", "-g", "daemon off;"]
