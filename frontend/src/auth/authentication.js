@@ -1,7 +1,7 @@
 import axios from "axios";
-
+const host = "15.165.190.20";
 async function register(data) {
-  const authEndpoint = "http://localhost:8000/auth/";
+  const authEndpoint = `${host}/auth`;
   return axios
     .post(authEndpoint, data)
     .then((response) => response.data)
@@ -11,7 +11,7 @@ async function register(data) {
 }
 
 async function login(data) {
-  const authEndpoint = "http://localhost:8000/auth/login/";
+  const authEndpoint = `${host}/auth/login`;
   return axios
     .post(authEndpoint, data)
     .then((response) => {
@@ -25,7 +25,7 @@ async function login(data) {
 
 async function logout() {
   if (localStorage.getItem("access_key") !== null) {
-    const authEndpoint = "http://localhost:8000/auth/logout/";
+    const authEndpoint = `${host}/auth/logout`;
     const access_key = localStorage.getItem("access_key");
     axios
       .post(authEndpoint, {
