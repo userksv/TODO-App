@@ -31,3 +31,28 @@ services:
       - "80:80"
     depends_on:
       - backend
+
+  # Worker
+  # this image does not copy requirements.txt from ./backend/ ???
+  # how to reduce image size
+  celery_worker:
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile
+    image: 930849404806.dkr.ecr.ap-northeast-2.amazonaws.com/todo:worker
+    command: celery -A todo_project worker -l info
+    volumes:
+      - ./backend:/app/backend
+    depends_on:
+      - redis
+  # Beat
+  celery_beat:
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile
+    image: 930849404806.dkr.ecr.ap-northeast-2.amazonaws.com/todo:beat
+    command: celery -A todo_project beat -l INFO
+    volumes:
+      - ./backend:/app/backend
+    depends_on:
+      - redis
