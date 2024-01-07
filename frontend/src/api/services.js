@@ -42,7 +42,7 @@ async function completeTask(task, completed) {
 }
 
 async function fetchTasks() {
-  const apiEndpoint = "http://localhost:8000/tasks/";
+  const apiEndpoint = "/tasks/";
   const access_key = localStorage.getItem("access_key");
   return axios
     .get(apiEndpoint, {
@@ -56,7 +56,7 @@ async function fetchTasks() {
 
 async function addNewTask(title, text) {
   const access_key = localStorage.getItem("access_key");
-  const apiEndpoint = "http://localhost:8000/task/create";
+  const apiEndpoint = "/task/create";
   const data = {
     title: title,
     description: text,
