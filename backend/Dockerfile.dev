@@ -1,4 +1,4 @@
-FROM --platform="linux/amd64" python:3.11-alpine
+FROM python:3.11-alpine
 
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -17,7 +17,3 @@ RUN apk add --update --no-cache --virtual .tmp-build-deps gcc libc-dev linux-hea
     && apk --purge del .tmp-build-deps 
 
 COPY . /app/backend/
-COPY ./entrypoint.sh .
-
-
-ENTRYPOINT [ "sh", "entrypoint.sh" ]

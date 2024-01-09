@@ -17,7 +17,3 @@ RUN apk add --update --no-cache --virtual .tmp-build-deps gcc libc-dev linux-hea
     && apk --purge del .tmp-build-deps 
 
 COPY . /app/backend/
-COPY ./entrypoint.sh .
-
-
-ENTRYPOINT [ "sh", "entrypoint.sh" ]

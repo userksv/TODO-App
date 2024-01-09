@@ -2,6 +2,12 @@ from django.core.mail import send_mail
 from celery import shared_task
 from django.contrib.auth.models import User
 
+
+@shared_task()
+def test_task():
+    print("Testing tasks and beat!!!!!!!")
+    return
+
 @shared_task()
 def send_email_remainder():
     users = get_users_tasks()

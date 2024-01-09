@@ -14,5 +14,3 @@ def send_welcome_email_task(recipient, username):
         [recipient],
         fail_silently=False,
     )
-
-

@@ -7,6 +7,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     image: 930849404806.dkr.ecr.ap-northeast-2.amazonaws.com/todo:backend
+    command: gunicorn todo_project.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - ./backend:/app/backend
       - static_volume:/app/backend/staticfiles
@@ -44,7 +45,7 @@ services:
       context: .
       dockerfile: ./backend/Dockerfile
     image: 930849404806.dkr.ecr.ap-northeast-2.amazonaws.com/todo:worker
-    command: celery -A todo_project worker -l info
+    command: python -m celery -A todo_project worker -l info
     volumes:
       - ./backend:/app/backend
     env_file:

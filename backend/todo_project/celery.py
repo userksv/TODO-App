@@ -28,4 +28,3 @@ app.conf.beat_schedule = {
         # 'schedule': 5.0, # for test every 5 seconds    
     },
 }
-

@@ -4,7 +4,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 COPY . .
-RUN npm ci
+RUN npm install
 RUN npm run build
 
 FROM --platform="linux/amd64" nginx:1.23.2-alpine

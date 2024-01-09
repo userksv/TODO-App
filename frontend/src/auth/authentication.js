@@ -1,5 +1,5 @@
 import axios from "axios";
-const host = "15.165.190.20:8000";
+// const host = "15.165.190.20:8000";
 async function register(data) {
   const authEndpoint = `/auth/`;
   return axios
