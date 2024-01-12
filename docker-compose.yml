@@ -6,12 +6,14 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile.dev
-    command: gunicorn todo_project.wsgi:application -b 0.0.0.0:8000
+    command: python manage.py runserver
+    environment:
+      - ENV=dev
     volumes:
       - ./backend:/app/backend
       - static_volume:/staticfiles
     env_file:
-      - ./backend/todo_project/.env
+      - ./backend/todo_project/.env.dev
     ports:
       - 8000:8000
     depends_on:
@@ -44,7 +46,8 @@ services:
       - 80:80
     depends_on:
       - backend
-      # Worker
+
+  # Worker
   # this image does not copy requirements.txt from ./backend/ ???
   # how to reduce image size
   celery_worker:
@@ -54,6 +57,8 @@ services:
     command: python -m celery -A todo_project worker -l info
     volumes:
       - ./backend:/app/backend
+    env_file:
+      - ./backend/todo_project/.env.dev
     depends_on:
       - redis
       - db
@@ -65,9 +70,10 @@ services:
     command: celery -A todo_project beat -l INFO
     volumes:
       - ./backend:/app/backend
+    env_file:
+      - ./backend/todo_project/.env.dev
     depends_on:
       - redis
       - db
-
 volumes:
   static_volume:

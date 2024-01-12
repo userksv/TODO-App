@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 import { register, handleAuthErrors } from "../auth/authentication";
 
 const Register = () => {
+  const [registered, setRegistered] = useState(false);
+  const [username, setUsername] = useState("");
   // IN DEV MODE REACT RENDERS TWICE THIS TRIGGERS ERROR WHEN NEW USER IS REGISTERED
   const [formData, setFormData] = useState({
     email: "",
@@ -27,8 +30,8 @@ const Register = () => {
     };
     try {
       const res = await register(data);
-      // console.log(res);
-      window.location.href = "/login";
+      setRegistered(true);
+      setUsername(data.username);
       return;
     } catch (error) {
       console.log(error);
@@ -43,58 +46,74 @@ const Register = () => {
         <div className="col-md-6">
           <div className="card">
             <div className="card-body">
-              <h3 className="card-title text-center">Register</h3>
-              <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                  {error && <p style={{ color: "red" }}>{error}</p>}
+              {
+                registered && (
+                  <>
+                    <h3 className="text-center">Registration succesfull.</h3>
+                    <p className="text-center">
+                      Your login is{" "}
+                      <span className="text-danger">{username}</span> use it to
+                      login.
+                    </p>
+                  </>
+                ) /* ***** */
+              }
+              {!registered && (
+                <>
+                  <h3 className="card-title text-center">Register</h3>
+                  <form onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                      {error && <p style={{ color: "red" }}>{error}</p>}
 
-                  <label htmlFor="email" className="form-label">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="password" className="form-label">
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="password1"
-                    name="password1"
-                    value={formData.password1}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="confirmPassword" className="form-label">
-                    Confirm Password
-                  </label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="password2"
-                    name="password2"
-                    value={formData.password2}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="text-center">
-                  <button type="submit" className="btn btn-primary">
-                    Register
-                  </button>
-                </div>
-              </form>
+                      <label htmlFor="email" className="form-label">
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        className="form-control"
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label htmlFor="password" className="form-label">
+                        Password
+                      </label>
+                      <input
+                        type="password"
+                        className="form-control"
+                        id="password1"
+                        name="password1"
+                        value={formData.password1}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label htmlFor="confirmPassword" className="form-label">
+                        Confirm Password
+                      </label>
+                      <input
+                        type="password"
+                        className="form-control"
+                        id="password2"
+                        name="password2"
+                        value={formData.password2}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                    <div className="text-center">
+                      <button type="submit" className="btn btn-primary">
+                        Register
+                      </button>
+                    </div>
+                  </form>
+                </>
+              )}
             </div>
           </div>
         </div>

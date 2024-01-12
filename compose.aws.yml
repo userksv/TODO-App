@@ -10,7 +10,7 @@ services:
     command: gunicorn todo_project.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - ./backend:/app/backend
-      - static_volume:/app/backend/staticfiles
+      - static_volume:/staticfiles
     env_file:
       - ./backend/todo_project/.env
     ports:

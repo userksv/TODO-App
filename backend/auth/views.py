@@ -17,10 +17,7 @@ class CustomRegisterView(RegisterView):
         # send welcome email after registration Celery task
         recipient = request.data['email']
         username = request.data['username']
-        print(recipient, username)
-        send_welcome_email_task.delay(recipient, username)
-        
-        print("custom register class")
+        send_welcome_email_task.delay(recipient, username)        
         return super().create(request, *args, **kwargs)
 
 

@@ -8,7 +8,7 @@ WORKDIR /app/backend
 
 COPY requirements.txt /app/backend/
 
-RUN apk --no-cache add bash
+RUN apk --no-cache add vim
 
 RUN apk add --update --no-cache --virtual .tmp-build-deps gcc libc-dev linux-headers postgresql-dev \
     && apk add libffi-dev \
