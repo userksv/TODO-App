@@ -7,7 +7,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     image: 930849404806.dkr.ecr.ap-northeast-2.amazonaws.com/todo:backend
-    command: gunicorn todo_project.wsgi:application --bind 0.0.0.0:8000
+    command: /start-django
     volumes:
       - ./backend:/app/backend
       - static_volume:/app/backend/staticfiles
@@ -24,14 +24,13 @@ services:
 
   # React-nginx
   frontend:
+    container_name: frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
     image: 930849404806.dkr.ecr.ap-northeast-2.amazonaws.com/todo:frontend
     volumes:
-      - ./frontend:/app/frontend
       - static_volume:/app/backend/staticfiles
-    container_name: frontend
     ports:
       - "80:80"
     depends_on:
@@ -42,10 +41,10 @@ services:
   # how to reduce image size
   celery_worker:
     build:
-      context: .
-      dockerfile: ./backend/Dockerfile
+      context: ./backend
+      dockerfile: Dockerfile
     image: 930849404806.dkr.ecr.ap-northeast-2.amazonaws.com/todo:worker
-    command: python -m celery -A todo_project worker -l info
+    command: /start-worker
     volumes:
       - ./backend:/app/backend
     env_file:
@@ -55,10 +54,10 @@ services:
   # Beat
   celery_beat:
     build:
-      context: .
-      dockerfile: ./backend/Dockerfile
+      context: ./backend
+      dockerfile: Dockerfile
     image: 930849404806.dkr.ecr.ap-northeast-2.amazonaws.com/todo:beat
-    command: celery -A todo_project beat -l INFO
+    command: /start-beat
     volumes:
       - ./backend:/app/backend
     env_file:
