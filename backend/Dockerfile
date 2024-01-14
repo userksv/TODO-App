@@ -7,6 +7,9 @@ WORKDIR /app/backend
 
 
 COPY requirements.txt /app/backend/
+COPY ./entrypoint.sh /app/backend/
+
+RUN chmod a+x /app/backend/entrypoint.sh
 
 RUN apk --no-cache add vim
 
@@ -17,3 +20,7 @@ RUN apk add --update --no-cache --virtual .tmp-build-deps gcc libc-dev linux-hea
     && apk --purge del .tmp-build-deps 
 
 COPY . /app/backend/
+
+
+ENTRYPOINT [ "sh", "/app/backend/entrypoint.sh" ]
+

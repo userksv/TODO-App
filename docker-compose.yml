@@ -6,12 +6,12 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile.dev
-    command: python manage.py runserver
-    environment:
-      - ENV=dev
+    command: /start-django
     volumes:
       - ./backend:/app/backend
-      - static_volume:/staticfiles
+      - static_volume:/app/backend/staticfiles
+    environment:
+      - ENV=dev
     env_file:
       - ./backend/todo_project/.env.dev
     ports:
@@ -23,57 +23,55 @@ services:
   # Redis
   redis:
     image: "redis:alpine"
-
-  # PostgreSQL
+  # PSQL
   db:
-    image: postgres:16-alpine
-    environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=postgres
+    image: postgres:15
     volumes:
-      - ./data/db:/var/lib/postgresql/data/
+      - ps_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
 
   # React-nginx
   frontend:
+    container_name: react-nginx
     build:
       context: ./frontend
       dockerfile: Dockerfile.dev
     volumes:
-      - ./frontend:/app/frontend
-      - /app/node_modules
+      - static_volume:/app/backend/staticfiles
     ports:
-      - 80:80
+      - "80:80"
     depends_on:
       - backend
 
-  # Worker
+    # Worker
   # this image does not copy requirements.txt from ./backend/ ???
   # how to reduce image size
   celery_worker:
     build:
-      context: .
-      dockerfile: ./backend/Dockerfile.dev
-    command: python -m celery -A todo_project worker -l info
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    command: /start-worker
     volumes:
       - ./backend:/app/backend
     env_file:
       - ./backend/todo_project/.env.dev
     depends_on:
       - redis
-      - db
   # Beat
   celery_beat:
     build:
-      context: .
-      dockerfile: ./backend/Dockerfile.dev
-    command: celery -A todo_project beat -l INFO
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    command: /start-beat
     volumes:
       - ./backend:/app/backend
     env_file:
       - ./backend/todo_project/.env.dev
     depends_on:
       - redis
-      - db
 volumes:
   static_volume:
+  ps_data:

@@ -1,10 +1,12 @@
 from django.contrib import admin
 from django.urls import path, include
-from dj_rest_auth import urls
-
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', include('core.urls')),
     path('auth/', include('auth.urls')),
     path('admin/', admin.site.urls),
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

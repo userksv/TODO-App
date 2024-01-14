@@ -11,4 +11,4 @@ def send_welcome_email_task(recipient, username):
         "ToDo app developer",
         [recipient],
         fail_silently=False,
-    )
+    ) 
