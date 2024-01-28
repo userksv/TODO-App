@@ -13,8 +13,8 @@ services:
       - static_volume:/app/backend/staticfiles
     env_file:
       - ./backend/todo_project/.env
-    ports:
-      - 8000:8000
+    expose:
+      - 8000
     depends_on:
       - redis
 
