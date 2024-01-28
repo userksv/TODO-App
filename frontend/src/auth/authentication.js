@@ -1,4 +1,12 @@
 import axios from "axios";
+
+if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+  // dev code
+  axios.defaults.baseURL = "http://localhost:8000";
+} else {
+  // production code
+}
+
 async function register(data) {
   const authEndpoint = `/auth/`;
   return axios
@@ -14,8 +22,11 @@ async function login(data) {
   return axios
     .post(authEndpoint, data)
     .then((response) => {
-      const key = response.data.key;
+      console.log(response);
+      const key = response.data.token;
+      const username = response.data.username;
       localStorage.setItem("access_key", key);
+      localStorage.setItem("username", username);
     })
     .catch((error) => {
       throw error;

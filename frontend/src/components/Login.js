@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { login } from "../auth/authentication";
+import Todos from "./Todos";
 
 const Login = () => {
   const [error, setError] = useState();
@@ -23,6 +24,7 @@ const Login = () => {
       return;
     } catch (error) {
       setError("Check your login and password!");
+      console.log(error);
     }
   }
 

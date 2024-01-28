@@ -6,7 +6,8 @@ from dj_rest_auth.registration.urls import urlpatterns as registration_urls
 from . import views
 urlpatterns = [
     path('', views.CustomRegisterView.as_view(), name='rest_register'),
-    path('login/', views.CustomLoginView.as_view(), name='rest_login')
+    path('login/', views.CustomLoginView.as_view(), name='rest_login'),
+    # path('login/', views.CustomAuthToken.as_view(), name='rest_login')
 ]
 urlpatterns += auth_urls
 # urlpatterns += registration_urls

@@ -9,9 +9,11 @@ import {
 import EditTask from "./EditTask";
 
 export default function Todos(props) {
+  console.log(props);
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
   const [isAuth, setAuth] = useState(props.isAuth);
+  const [username, setUsername] = useState(props.username);
   const [isEditing, setIsEditing] = useState(false);
   const [task, setTask] = useState(null);
   const [filteredTasks, setFilteredTasks] = useState([]);
@@ -82,10 +84,7 @@ export default function Todos(props) {
   const handleCancel = () => {
     setIsEditing(false);
   };
-  const handleSave = () => {
-    setIsEditing(false);
-    // update all tasks
-  };
+
   async function handleDeleteTask(task) {
     if (isAuth) {
       try {
@@ -131,9 +130,9 @@ export default function Todos(props) {
                       <div className="mb-3">
                         <label
                           htmlFor="new-todo-input"
-                          className="form-label h2"
+                          className="form-label h3"
                         >
-                          What needs to be done?
+                          Hi {username}! What needs to be done?
                         </label>
                         <input
                           type="text"
@@ -190,7 +189,10 @@ export default function Todos(props) {
                     {!isEditing && (
                       <>
                         <h2 id="list-heading" className="mt-3">
-                          {tasks.length} tasks remaining
+                          {tasks.length == 1
+                            ? `${tasks.length} task`
+                            : `${tasks.length} tasks`}{" "}
+                          remaining
                         </h2>
                         <ul
                           role="list"

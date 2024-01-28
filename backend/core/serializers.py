@@ -2,6 +2,19 @@ from rest_framework import serializers
 from .models import Task
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
+from dj_rest_auth.serializers import TokenSerializer
+from rest_framework import serializers
+
+class CustomTokenSerializer(TokenSerializer):
+    """
+    Add custom fields to the token response serializer.
+    """
+    username_field = serializers.CharField(source='user.username', read_only=True)
+
+    class Meta(TokenSerializer.Meta):
+        # Add any additional fields in the Meta class if needed
+        fields = TokenSerializer.Meta.fields + ('username_field',)
+
 
 class UserSerializer(serializers.ModelSerializer):
     # because 'tasks' is a `reverse` relationship on the User model, it will not be included dy default when using the

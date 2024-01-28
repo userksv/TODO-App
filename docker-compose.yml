@@ -14,8 +14,8 @@ services:
       - ENV=dev
     env_file:
       - ./backend/todo_project/.env.dev
-    ports:
-      - 8000:8000
+    expose:
+      - 8000
     depends_on:
       - redis
       - db
@@ -41,6 +41,7 @@ services:
       dockerfile: Dockerfile.dev
     volumes:
       - static_volume:/app/backend/staticfiles
+      - .:/app
     ports:
       - "80:80"
     depends_on:
@@ -49,29 +50,29 @@ services:
     # Worker
   # this image does not copy requirements.txt from ./backend/ ???
   # how to reduce image size
-  celery_worker:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile.dev
-    command: /start-worker
-    volumes:
-      - ./backend:/app/backend
-    env_file:
-      - ./backend/todo_project/.env.dev
-    depends_on:
-      - redis
-  # Beat
-  celery_beat:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile.dev
-    command: /start-beat
-    volumes:
-      - ./backend:/app/backend
-    env_file:
-      - ./backend/todo_project/.env.dev
-    depends_on:
-      - redis
+  # celery_worker:
+  #   build:
+  #     context: ./backend
+  #     dockerfile: Dockerfile.dev
+  #   command: /start-worker
+  #   volumes:
+  #     - ./backend:/app/backend
+  #   env_file:
+  #     - ./backend/todo_project/.env.dev
+  #   depends_on:
+  #     - redis
+  # # Beat
+  # celery_beat:
+  #   build:
+  #     context: ./backend
+  #     dockerfile: Dockerfile.dev
+  #   command: /start-beat
+  #   volumes:
+  #     - ./backend:/app/backend
+  #   env_file:
+  #     - ./backend/todo_project/.env.dev
+  #   depends_on:
+  #     - redis
 volumes:
   static_volume:
   ps_data:

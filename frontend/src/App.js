@@ -11,14 +11,16 @@ import Todos from "./components/Todos";
 
 const App = () => {
   const [isAuth, setAuth] = useState(false);
+  const [username, setUsername] = useState("");
 
   useState(() => {
     if (localStorage.getItem("access_key") !== null) {
       // check local storage if it contains access_key, then user is authenticated
       // set Auth and pass it to Navbar component for rendering
+      const username = setUsername(localStorage.getItem("username"));
       setAuth(true);
     }
-  }, [isAuth]);
+  }, [isAuth, username]);
 
   return (
     <>
@@ -26,7 +28,10 @@ const App = () => {
         <div className="container mt-3">
           <Navbar isAuth={isAuth} />
           <Routes>
-            <Route path="/" element={<Todos isAuth={isAuth} />} />
+            <Route
+              path="/"
+              element={<Todos isAuth={isAuth} username={username} />}
+            />
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/register" element={<Register />} />
