@@ -52,11 +52,23 @@ async function logout() {
   }
 }
 
-function handleAuthErrors(errors) {
-  console.log(errors);
-  //   let err = errors.forEach((error) => {
-  //     console.log(error);
-  //   });
-  //   console.log(typeof errors);
+function handleAuthErrors(error) {
+  /*  
+    Function get errors response from server and returns corresponding error
+  */
+  const errors = error.response.data;
+  if (error.response.data.length == 0) {
+    return 0;
+  }
+  for (const [key, value] of Object.entries(errors)) {
+    if (key === "username") {
+      return value[0].replace("username", "credentials");
+    } else if (key === "password1") {
+      return value[0];
+    } else if (key === "non_field_errors") {
+      return value[0];
+    }
+  }
 }
+
 export { register, logout, login, handleAuthErrors };

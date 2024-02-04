@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY=os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -174,7 +174,7 @@ SESSION_CACHE_ALIAS = "default"
 REDIS_URL = 'redis://redis:6379'
 
 if ENV == 'dev':
-    REDIS_URL = 'redis://localhost:6379'
+    REDIS_URL = 'redis://127.0.0.1:6379'
 
 CACHES = {
     "default": {

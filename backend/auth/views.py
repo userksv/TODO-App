@@ -23,12 +23,11 @@ class CustomRegisterView(RegisterView):
         # send welcome email after registration Celery task
         recipient = request.data['email']
         username = request.data['username']
-        send_welcome_email_task.delay(recipient, username)        
+        send_welcome_email_task.delay(recipient, username)
         return super().create(request, *args, **kwargs)
 
 
 class CustomLoginView(ObtainAuthToken):
-
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data,
                                            context={'request': request})

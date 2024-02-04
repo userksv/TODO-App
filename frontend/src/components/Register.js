@@ -34,9 +34,7 @@ const Register = () => {
       setUsername(data.username);
       return;
     } catch (error) {
-      console.log(error);
-      setError("Something went wrong. Try again later");
-      // handleAuthErrors(error.response.data); LATER
+      setError(handleAuthErrors(error));
     }
   }
 
