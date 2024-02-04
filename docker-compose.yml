@@ -50,29 +50,29 @@ services:
     # Worker
   # this image does not copy requirements.txt from ./backend/ ???
   # how to reduce image size
-  # celery_worker:
-  #   build:
-  #     context: ./backend
-  #     dockerfile: Dockerfile.dev
-  #   command: /start-worker
-  #   volumes:
-  #     - ./backend:/app/backend
-  #   env_file:
-  #     - ./backend/todo_project/.env.dev
-  #   depends_on:
-  #     - redis
-  # # Beat
-  # celery_beat:
-  #   build:
-  #     context: ./backend
-  #     dockerfile: Dockerfile.dev
-  #   command: /start-beat
-  #   volumes:
-  #     - ./backend:/app/backend
-  #   env_file:
-  #     - ./backend/todo_project/.env.dev
-  #   depends_on:
-  #     - redis
+  celery_worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    command: /start-worker
+    volumes:
+      - ./backend:/app/backend
+    env_file:
+      - ./backend/todo_project/.env.dev
+    depends_on:
+      - redis
+  # Beat
+  celery_beat:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    command: /start-beat
+    volumes:
+      - ./backend:/app/backend
+    env_file:
+      - ./backend/todo_project/.env.dev
+    depends_on:
+      - redis
 volumes:
   static_volume:
   ps_data:

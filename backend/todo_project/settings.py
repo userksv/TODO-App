@@ -173,9 +173,6 @@ SESSION_CACHE_ALIAS = "default"
 
 REDIS_URL = 'redis://redis:6379'
 
-if ENV == 'dev':
-    REDIS_URL = 'redis://127.0.0.1:6379'
-
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
