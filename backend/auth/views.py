@@ -28,17 +28,17 @@ class CustomRegisterView(RegisterView):
         headers = self.get_success_headers(serializer.data)
         data = self.get_response_data(user)
 
+        recipient = request.data['email']
+        username = request.data['username']
+        # send welcome email after registration (Celery task)
+        send_welcome_email_task.delay(recipient, username)
+
         if data:
             response = Response(
                 data,
                 status=status.HTTP_201_CREATED,
                 headers=headers,
-            )
-            recipient = request.data['email']
-            username = request.data['username']
-            # send welcome email after registration (Celery task)
-            print("Sending email")
-            send_welcome_email_task.delay(recipient, username)
+            )            
         else:
             response = Response(status=status.HTTP_204_NO_CONTENT, headers=headers)
 
