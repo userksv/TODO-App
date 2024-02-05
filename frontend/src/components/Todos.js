@@ -9,7 +9,6 @@ import {
 import EditTask from "./EditTask";
 
 export default function Todos(props) {
-  console.log(props);
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
   const [isAuth, setAuth] = useState(props.isAuth);
@@ -121,7 +120,19 @@ export default function Todos(props) {
         <div className="col-md-6">
           <div className="card">
             <div className="card-body text-center">
-              {!isAuth && <h3>Login to continue</h3> /* ***** */}
+              {
+                !isAuth && (
+                  <>
+                    <h3>Login to continue</h3>
+                    <small>
+                      Hi! You can try this app without registration. <br /> Log
+                      in with (username: <strong>'test'</strong>, pass:{" "}
+                      <strong>'Testing321'</strong>)
+                    </small>
+                  </>
+                )
+                /* ***** */
+              }
 
               {
                 isAuth /* *** */ && (
