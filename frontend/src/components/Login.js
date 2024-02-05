@@ -24,7 +24,6 @@ const Login = () => {
       return;
     } catch (error) {
       setError("Check your login and password!");
-      console.log(error);
     }
   }
 

@@ -6,6 +6,8 @@ import { register, handleAuthErrors } from "../auth/authentication";
 const Register = () => {
   const [registered, setRegistered] = useState(false);
   const [username, setUsername] = useState("");
+  const [error, setError] = useState();
+
   // IN DEV MODE REACT RENDERS TWICE THIS TRIGGERS ERROR WHEN NEW USER IS REGISTERED
   const [formData, setFormData] = useState({
     email: "",
@@ -14,7 +16,6 @@ const Register = () => {
     password2: "",
   });
 
-  const [error, setError] = useState();
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
