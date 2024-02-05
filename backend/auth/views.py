@@ -22,28 +22,12 @@ app_settings.EMAIL_VERIFICATION = 'none' # Don't auto send verification email du
 
 class CustomRegisterView(RegisterView):
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        data = self.get_response_data(user)
-
+        super().create(request, *args, **kwargs)
         recipient = request.data['email']
         username = request.data['username']
         # send welcome email after registration (Celery task)
         send_welcome_email_task.delay(recipient, username)
-
-        if data:
-            response = Response(
-                data,
-                status=status.HTTP_201_CREATED,
-                headers=headers,
-            )            
-        else:
-            response = Response(status=status.HTTP_204_NO_CONTENT, headers=headers)
-
-        return response
-    
+        
 
 class CustomLoginView(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
